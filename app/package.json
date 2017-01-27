@@ -1,0 +1,15 @@
+{
+  "name": "eroga-ss-editer",
+  "version": "0.0.0",
+  "description": "エロゲーのスクショの便利な編集機能提供！",
+  "main": "./dist/main.js",
+  "dependencies": {
+    "vue": "^2.1.10",
+    "vue-electron": "^1.0.6",
+    "vue-resource": "^1.0.3",
+    "vue-router": "^2.1.2",
+    "vuex": "^2.1.1"
+  },
+  "devDependencies": {},
+  "author": "namaz <namazu510@hotmail.co.jp>"
+}
