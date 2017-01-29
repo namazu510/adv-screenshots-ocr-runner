@@ -1,11 +1,19 @@
 export default [
+  // {
+  //   path: '/',
+  //   name: 'landing-page',
+  //   component: require('components/LandingPageView')
+  // },
   {
     path: '/',
-    name: 'landing-page',
-    component: require('components/LandingPageView')
+    component: require('components/MainPageView')
   },
   {
-    path: '*',
-    redirect: '/'
+    path: '/settings',
+    component: require('components/SettingPageView')
+  },
+  {
+    path: '/help',
+    component: require('components/HelpPageView')
   }
 ]
