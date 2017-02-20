@@ -104,7 +104,9 @@
             <v-btn ma-2 @click.native="logClear">clear</v-btn>
         </v-row>
         <div style="overflow:scroll; height:200px; border: solid 1px black; text-align:left;">
-            <div v-for="log in logs">{{ log }}</div>
+            <div v-for="log in logs">
+                <div v-html="log"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -114,6 +116,7 @@
     }
 </style>
 <script>
+    import {calcRgbDiff, parseRgb} from '../lib/util'
     const Dialog = require('electron').remote.dialog
     const fs = require('fs')
     export default{
@@ -141,7 +144,7 @@
           imgHeight: 0,
           progress: {
             value: 60,
-            show: true
+            show: false
           }
         }
       },
@@ -288,19 +291,17 @@
               for (var j = 0; j < image.width; j++) {
                 const rowSize = (i * image.width + j) * 4
                 // 真っ白以外を真っ黒にする
-                if (image.data[rowSize + 0] <= 230) {
-                  image.data[rowSize + 0] = 0
-                  image.data[rowSize + 1] = 0
-                  image.data[rowSize + 2] = 0
-                  continue
+                const testRgb = {
+                  r: image.data[rowSize + 0],
+                  g: image.data[rowSize + 1],
+                  b: image.data[rowSize + 2]
                 }
-                if (image.data[rowSize + 1] <= 230) {
-                  image.data[rowSize + 0] = 0
-                  image.data[rowSize + 1] = 0
-                  image.data[rowSize + 2] = 0
-                  continue
-                }
-                if (image.data[rowSize + 2] <= 230) {
+                // フォント色として指定した色とピクセルの色距離を計算する
+                const fontColor = parseRgb(this.fontColor)
+                const rgbDiff = calcRgbDiff(testRgb, fontColor)
+
+                // 色差が許容値を超えた場合ピクセルを真っ黒に埋める
+                if (rgbDiff >= (this.fontColorRange / 100)) {
                   image.data[rowSize + 0] = 0
                   image.data[rowSize + 1] = 0
                   image.data[rowSize + 2] = 0
@@ -317,7 +318,9 @@
                .catch(err => console.error(err))
           }
           const imgPrev = (canvas) => {
-            console.log(canvas)
+            const data = canvas.toDataURL()
+            const log = `<img src="${data}"/>`
+            this.logs.push(log)
             return Promise.resolve(canvas)
           }
           const x = this.position.start.x
