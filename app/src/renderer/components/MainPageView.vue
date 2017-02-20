@@ -319,10 +319,15 @@
                 const rgbDiff = calcRgbDiff(testRgb, fontColor)
 
                 // 色差が許容値を超えた場合ピクセルを真っ黒に埋める
+                // そうでなければ真っ白にし二値化する
                 if (rgbDiff >= (this.fontColorRange / 100)) {
                   image.data[rowSize + 0] = 0
                   image.data[rowSize + 1] = 0
                   image.data[rowSize + 2] = 0
+                } else {
+                  image.data[rowSize + 0] = 255
+                  image.data[rowSize + 1] = 255
+                  image.data[rowSize + 2] = 255
                 }
               }
             }
