@@ -1,114 +1,132 @@
 <template>
-    <div id="main-page">
-        <div class="headline">対象画像ディレクトリ</div>
+  <div id="main-page">
+    <div class="headline">対象画像ディレクトリ</div>
+    <v-row>
+      <v-col xs9="xs9">
+        <v-text-input
+          disabled
+          label="FolderPath"
+          v-model="text"
+        ></v-text-input>
+      </v-col>
+      <v-col xs3="xs3">
+        <v-btn @click.native="folderSelect">Open</v-btn>
+      </v-col>
+    </v-row>
+    <v-row class="mt-5">
+      <v-col xs6>
+        <div class="display-1">OCR-Rule-Setting</div>
+        <div class="headline">台詞領域</div>
         <v-row>
-            <v-col xs9="xs9">
-                <v-text-input
-                        disabled
-                        label="FolderPath"
-                        v-model="text"
-                ></v-text-input>
-            </v-col>
-            <v-col xs3="xs3">
-                <v-btn @click.native="folderSelect">Open</v-btn>
-            </v-col>
+          <v-col xs4>
+            <div>始点(左上)</div><div>shift押しながら画像クリック</div>
+          </v-col>
+          <v-col xs4>
+            <v-text-input
+              label="x"
+              type=number
+              v-model="position.start.x"
+            ></v-text-input>
+          </v-col>
+          <v-col xs4>
+            <v-text-input
+              label="y"
+              type=number
+              v-model="position.start.y"
+            ></v-text-input>
+          </v-col>
         </v-row>
-        <v-row class="mt-5">
-            <v-col xs6>
-                <div class="display-1">OCR-Rule-Setting</div>
-                <div class="headline">台詞領域</div>
-                <v-row>
-                    <v-col xs4>
-                        <div>始点(左上)</div><div>shift押しながら画像クリック</div>
-                    </v-col>
-                    <v-col xs4>
-                        <v-text-input
-                                label="x"
-                                type=number
-                                v-model="position.start.x"
-                        ></v-text-input>
-                    </v-col>
-                    <v-col xs4>
-                        <v-text-input
-                                label="y"
-                                type=number
-                                v-model="position.start.y"
-                        ></v-text-input>
-                    </v-col>
-                </v-row>
 
-                <v-row>
-                    <v-col xs4>
-                        <div>終点(右下)</div><div>ctrl押しながら画像クリック</div>
-                    </v-col>
-                    <v-col xs4>
-                        <v-text-input
-                                label="x"
-                                type=number
-                                v-model="position.end.x"
-                        ></v-text-input>
-                    </v-col>
-                    <v-col xs4>
-                        <v-text-input
-                                label="y"
-                                type=number
-                                v-model="position.end.y"
-                        ></v-text-input>
-                    </v-col>
-                </v-row>
-                <div class="headline">フォントカラー</div>
-                <v-checkbox id="test7" name="test7" label="フォント色を指定する(精度が上がります)" v-model="useFilter" filled></v-checkbox>
-                <v-row v-if="useFilter">
-                    <v-col xs6>
-                        <v-text-input
-                                type=color
-                                v-model="fontColor"
-                                label="color"
-                        ></v-text-input>
-                    </v-col >
-                    <v-col xs6>
-                        <v-text-input
-                                type=number
-                                label="許容差分率0_100"
-                                v-model="fontColorRange"
-                        ></v-text-input>
-                    </v-col>
-                </v-row>
-                <div class="headline">出力ファイル名フォーマット</div>
-                <v-text-input
-                        label="output-format"
-                        v-model="outputFormat"
-                ></v-text-input>
-                <v-btn ripple info large @click.native="run" v-tooltip:bottom="{ html: '表示画像に対してOCRをテスト実行します.' }">TestRun</v-btn>
-                <v-btn ripple primary large @click.native="runAll" v-tooltip:bottom="{ html: '選択フォルダの画像全体に対し設定したルールを基にOCRを掛けます.' }">Run</v-btn>
-                <v-progress-linear v-model="progress.value" :active="progress.show"></v-progress-linear>
-            </v-col>
-            <v-col xs6>
-                <div v-if="!fileSelected" class="display-1"> File Not Found</div>
-                <div v-if="fileSelected" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                    <div class="display-1">Preview</div>
-                    <img :src="prevImageSrc" @click="imgClick"></img>
-                    <div> {{ selectedFile }} </div>
-                    <div>Width: {{ imgWidth }} px </div>
-                    <div>Height: {{ imgHeight }} px </div>
-
-                    <v-pagination :length.number="files.length" v-model="page"></v-pagination>
-                </div>
-            </v-col>
-        </v-row>
         <v-row>
+          <v-col xs4>
+            <div>終点(右下)</div><div>ctrl押しながら画像クリック</div>
+          </v-col>
+          <v-col xs4>
+            <v-text-input
+              label="x"
+              type=number
+              v-model="position.end.x"
+            ></v-text-input>
+          </v-col>
+          <v-col xs4>
+            <v-text-input
+              label="y"
+              type=number
+              v-model="position.end.y"
+            ></v-text-input>
+          </v-col>
+        </v-row>
+        <div class="headline">フォントカラー</div>
+        <v-checkbox
+          id="test7"
+          name="test7"
+          label="フォント色を指定する(精度が上がります)"
+          v-model="useFilter" filled></v-checkbox>
+        <v-row v-if="useFilter">
+          <v-col xs6>
+            <v-text-input
+              type=color
+              v-model="fontColor"
+              label="color"
+            ></v-text-input>
+          </v-col >
+          <v-col xs6>
+            <v-text-input
+              type=number
+              label="許容差分率0_100"
+              v-model="fontColorRange"
+            ></v-text-input>
+          </v-col>
+        </v-row>
+        <div class="headline">出力ファイル名フォーマット</div>
+        <v-text-input
+          label="output-format"
+          v-model="outputFormat"
+        ></v-text-input>
+        <v-btn
+          ripple
+          info
+          large
+          @click.native="run(selectedFile)"
+          v-tooltip:bottom="{ html: '表示画像に対してOCRをテスト実行します.' }">TestRun</v-btn>
+        <v-btn
+          ripple
+          primary
+          large
+          @click.native="runAll"
+          v-tooltip:bottom="{ html: '選択フォルダの画像全体に対し設定したルールを基にOCRを掛けます.' }">Run</v-btn>
+        <v-progress-linear
+          v-model="progressValue"
+          :active="progress.show">
 
-        </v-row>
-        <v-row>
-            <div class="headline">Log</div>
-            <v-btn ma-2 @click.native="logClear">clear</v-btn>
-        </v-row>
-        <div style="overflow:scroll; height:200px; border: solid 1px black; text-align:left;">
-            <div v-for="log in logs">
-                <div v-html="log"></div>
-            </div>
+        </v-progress-linear>
+      </v-col>
+      <v-col xs6>
+        <div v-if="!fileSelected" class="display-1"> File Not Found</div>
+        <div v-if="fileSelected" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
+          <div class="display-1">Preview</div>
+          <img :src="prevImageSrc" @click="imgClick"></img>
+          <div> {{ selectedFile }} </div>
+          <div>Width: {{ imgWidth }} px </div>
+          <div>Height: {{ imgHeight }} px </div>
+
+          <v-pagination :length.number="files.length" v-model="page"></v-pagination>
         </div>
+      </v-col>
+    </v-row>
+    <v-row>
+
+    </v-row>
+    <v-row>
+      <div class="headline">Log</div>
+      <v-btn ma-2 @click.native="logClear">clear</v-btn>
+    </v-row>
+    <div style="overflow:scroll; height:200px; border: solid 1px black; text-align:left;">
+      <div v-for="log in logs">
+        <div v-html="log"></div>
+      </div>
     </div>
+  </div>
 </template>
 <style scoped>
     img {
