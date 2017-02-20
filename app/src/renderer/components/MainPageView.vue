@@ -161,7 +161,6 @@
           imgWidth: 0,
           imgHeight: 0,
           progress: {
-            value: 60,
             show: false
           }
         }
@@ -283,7 +282,6 @@
         },
         runAll () {
           this.progress.show = true
-          this.progress.value = 0
           this.$store.dispatch('resetOcrRes')
           for (let i = 0; i <= this.files.length; i++) {
             setTimeout(this.run(this.files[i - 1]), 10 * i / 5)
@@ -350,7 +348,7 @@
           }
           const imgPrev = (canvas) => {
             const data = canvas.toDataURL()
-            const log = `<img src="${data}"/>`
+            const log = `<img src="${data}" style="max-width:50%"/>`
             this.logs.push(log)
             return Promise.resolve(canvas)
           }
@@ -361,7 +359,7 @@
 
           // const target = fileName || this.selectedFile
           // console.log(target)
-          loadImg(this.selectedFile)
+          loadImg(fileName)
             .then((img) => cutImg(img, x, y, width, height))
             .then((canvas) => {
               if (!this.useFilter) {
@@ -376,7 +374,7 @@
                 path: this.selectedFile,
                 res: result.text
               })
-              this.logs.push(`${this.selectedFile} => ${result.text}`)
+              this.logs.push(`${fileName} => ${result.text}`)
             })
         }
       }
