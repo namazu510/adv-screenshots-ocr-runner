@@ -175,6 +175,9 @@
         },
         selectedFile () {
           return this.files[this.page - 1]
+        },
+        progressValue () {
+          return this.$store.state.file.ocrRes.length / this.files.length
         }
       },
       watch: {
@@ -185,6 +188,11 @@
         },
         page () {
           this.prevImageCreate()
+        },
+        progressValue (val) {
+          if (val >= 0.95) {
+            this.progress.show = false
+          }
         }
       },
       mounted () {
