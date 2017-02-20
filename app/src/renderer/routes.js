@@ -15,5 +15,9 @@ export default [
   {
     path: '/help',
     component: require('components/HelpPageView')
+  },
+  {
+    path: '/result',
+    component: require('components/CheckPageView')
   }
 ]

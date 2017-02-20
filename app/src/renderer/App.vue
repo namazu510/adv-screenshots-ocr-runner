@@ -35,6 +35,11 @@
             router: true
           },
           {
+            text: 'Result',
+            href: '/result',
+            router: true
+          },
+          {
             text: 'Setting',
             href: '/settings',
             router: true
