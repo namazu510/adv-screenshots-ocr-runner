@@ -1,5 +1,8 @@
 import * as types from './mutation-types'
 
+const path = require('path')
+const fs = require('fs')
+
 export const decrementMain = ({ commit }) => {
   commit(types.DECREMENT_MAIN_COUNTER)
 }
@@ -9,9 +12,6 @@ export const incrementMain = ({ commit }) => {
 }
 
 export const readFileList = ({ commit }, folderPath) => {
-  const path = require('path')
-  const fs = require('fs')
-
   const find = (target, allowExt) => {
     console.log(target)
     const list = fs.readdirSync(target)
@@ -30,6 +30,26 @@ export const readFileList = ({ commit }, folderPath) => {
     '.BMP'
   ])
   commit(types.SET_FILE_LIST, fileList)
+}
+
+export const renameFile = ({state, commit}, {index, newName}) => {
+  const oldPath = state.file.ocrRes[index].path
+
+  const dirName = path.dirname(oldPath)
+  const ext = path.extname(oldPath)
+  const newPath = `${dirName}/${newName}${ext}`
+
+  console.log(`try rename ${oldPath} => ${newPath}`)
+  fs.rename(oldPath, newPath, (err) => {
+    if (err) {
+      console.log(`rename failed \n ${err}`)
+      return
+    }
+    console.log(`renamed ${oldPath}`)
+
+    // 新しいpathに対応させる
+    commit(types.UPDATE_FILE_PATH, {oldPath, newPath})
+  })
 }
 
 export const addOcrRes = ({commit}, res) => {

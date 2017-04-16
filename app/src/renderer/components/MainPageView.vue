@@ -106,7 +106,7 @@
         <div v-if="fileSelected" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
           <div class="display-1">Preview</div>
           <img :src="prevImageSrc" @click="imgClick"></img>
-          <div> {{ selectedFile }} </div>
+          <div> {{ selectedFile | fileName }} </div>
           <div>Width: {{ imgWidth }} px </div>
           <div>Height: {{ imgHeight }} px </div>
 

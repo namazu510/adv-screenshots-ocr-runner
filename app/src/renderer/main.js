@@ -21,6 +21,7 @@ const router = new Router({
   routes
 })
 
+require('./filter')
 /* eslint-disable no-new */
 new Vue({
   router,

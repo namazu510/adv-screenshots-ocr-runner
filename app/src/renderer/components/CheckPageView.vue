@@ -3,12 +3,13 @@
     <template v-if="ocrRes.length !== 0">
     <v-row>
       <!-- 出力結果　-->
-      <v-col xs6>
+      <v-col xs8>
         <table>
           <thead>
           <tr>
             <th>res</th>
             <th>clear</th>
+            <th>rename</th>
           </tr>
           </thead>
           <tbody>
@@ -26,18 +27,25 @@
               <td><v-btn
                 @click.native="clear(index)"
               ><v-icon>clear</v-icon></v-btn></td>
+              <td>
+                <v-btn
+                  @click.native="rename(index)"
+                >
+                  <v-icon>save</v-icon>
+                </v-btn>
+              </td>
             </tr>
           </template>
           </tbody>
         </table>
       </v-col>
       <!-- プレビュー -->
-      <v-col xs6>
+      <v-col xs4>
         <img :src="prevImg" class="prevImage">
       </v-col>
     </v-row>
     <v-row>
-      <v-btn block primary>ファイルをリネームする.</v-btn>
+      <v-btn block primary @click.native="renameAll()">すべてリネームする.</v-btn>
     </v-row>
     </template>
     <template v-if="ocrRes.length === 0">
@@ -99,6 +107,15 @@
         },
         previewUpload (index) {
           this.selectIndex = index
+        },
+        rename (index) {
+          const newName = this.textFormValues[index].replace(/\r?\n/g, '')
+          this.$store.dispatch('renameFile', {index, newName})
+        },
+        renameAll () {
+          for (var i = 0; i < this.textFormValues.length; i++) {
+            this.rename(i)
+          }
         }
 
       }
