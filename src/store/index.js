@@ -10,6 +10,10 @@ export default new Vuex.Store({
     progress: false,
     ocrRes: []
   },
+  getters: {
+    progress: state => state.progress,
+    ocrRes: state => state.ocrRes,
+  },
   mutations: {
     setProgress(state, progress) {
       state.progress = progress

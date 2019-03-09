@@ -17,10 +17,6 @@
           <v-btn ripple primary large @click.native="run">
             Run
           </v-btn>
-          <v-progress-linear
-            v-model="progress.value"
-            :active="progress.show"
-          ></v-progress-linear>
         </v-layout>
       </v-flex>
       <v-flex xs6>
@@ -30,19 +26,6 @@
           :position.sync="position"
         />
       </v-flex>
-    </v-layout>
-    <v-layout>
-      <v-layout>
-        <div class="headline">Log</div>
-        <v-btn ma-2 @click.native="logClear">clear</v-btn>
-      </v-layout>
-      <div
-        style="overflow:scroll; height:200px; border: solid 1px black; text-align:left;"
-      >
-        <div v-for="(log, i) in logs" :key="i">
-          <div v-html="log"></div>
-        </div>
-      </div>
     </v-layout>
   </div>
 </template>
@@ -71,13 +54,7 @@ export default {
       useFilter: false,
       fontColor: "#FFFFFF",
       fontColorRange: 10,
-      prevImageSrc: "",
       outputFormat: "[text]",
-      logs: [],
-      progress: {
-        value: 0,
-        show: false
-      }
     }
   },
   watch: {
@@ -89,6 +66,9 @@ export default {
   computed: {
     selectedFile () {
       return this.files[this.page - 1]
+    },
+    progress () {
+      return this.$store.getters['progress']
     }
   },
   methods: {

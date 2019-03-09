@@ -56,9 +56,6 @@ async function ocr(file, options) {
     })
   }
   // img.contain(1980, 400)
-
-  await img.writeAsync('test.png')
-
   const imgBuff = await img.getBufferAsync(Jimp.MIME_PNG)
 
   const text = await new Promise((resolve, reject) => {

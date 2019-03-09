@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from "vue-router";
 import MainView from '../views/Main'
+import ResultView from '../views/Result'
 
 Vue.use(Router);
 
@@ -15,7 +16,7 @@ export default new Router({
     {
       name: 'result',
       path: "/result",
-
+      component: ResultView
     }
   ],
   scrollBehavior() {
