@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+import { parseRgb, calcRgbDiff } from "../../util/color"
 import { debounce } from "../../util/util"
 const fs = require("fs").promises
 const path = require("path")
@@ -29,7 +30,9 @@ export default {
   props: {
     files: Array,
     page: Number,
-    position: Object
+    position: Object,
+    fontColor: String,
+    fontColorRange: Number
   },
   data() {
     return {
@@ -55,13 +58,19 @@ export default {
     },
     selectedFile() {
       this.debouncedLoadImgAndCreatePreview()
+    },
+    fontColor() {
+      this.debouncedLoadImgAndCreatePreview()
+    },
+    fontColorRange() {
+      this.debouncedLoadImgAndCreatePreview()
     }
   },
   created() {
     this.loadImgAndCreatePreview()
   },
   methods: {
-    debouncedLoadImgAndCreatePreview: debounce(function () {
+    debouncedLoadImgAndCreatePreview: debounce(function() {
       this.loadImgAndCreatePreview()
     }, 250),
     async loadImgAndCreatePreview() {
@@ -79,25 +88,63 @@ export default {
       // canvasを引いて.枠線を引く
       const baseImage = new Image()
       baseImage.src = imgDataURL
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
 
-      const draw = () => {
-        const w = this.position.end.x - this.position.start.x
-        const h = this.position.end.y - this.position.start.y
+      const draw = canvas => {
+        const { x, y } = this.position.start
+        const w = this.position.end.x - x
+        const h = this.position.end.y - y
 
+        if (x === 0 || y === 0 || w === 0 || h === 0) {
+          return
+        }
+
+        const ctx = canvas.getContext("2d")
         ctx.strokeStyle = "rgb(255,0,0)"
-        ctx.strokeRect(this.position.start.x, this.position.start.y, w, h)
-        this.imgWidth = canvas.width
-        this.imgHeight = canvas.height
-        this.prevImageDataSrc = canvas.toDataURL()
+        ctx.strokeRect(x, y, w, h)
+
+        // 二値化処理 preview
+        if (this.fontColor && this.fontColorRange !== undefined) {
+          const image = ctx.getImageData(x, y, w, h)
+          for (let i = 0; i < image.height; i++) {
+            for (let j = 0; j < image.width; j++) {
+              const dx = (i * image.width + j) * 4
+              if (
+                calcRgbDiff(
+                  {
+                    r: image.data[dx],
+                    g: image.data[dx + 1],
+                    b: image.data[dx + 2]
+                  },
+                  parseRgb(this.fontColor)
+                ) >=
+                this.fontColorRange / 100
+              ) {
+                image.data[dx] = 0
+                image.data[dx + 1] = 0
+                image.data[dx + 2] = 0
+              } else {
+                image.data[dx] = 255
+                image.data[dx + 1] = 255
+                image.data[dx + 2] = 255
+              }
+            }
+          }
+          ctx.putImageData(image, x, y)
+        }
       }
 
       baseImage.onload = () => {
+        const canvas = document.createElement("canvas")
+        const ctx = canvas.getContext("2d")
         canvas.width = baseImage.width
         canvas.height = baseImage.height
         ctx.drawImage(baseImage, 0, 0)
-        draw()
+
+        draw(canvas)
+
+        this.imgWidth = canvas.width
+        this.imgHeight = canvas.height
+        this.prevImageDataSrc = canvas.toDataURL()
       }
     },
     imgClick(event) {

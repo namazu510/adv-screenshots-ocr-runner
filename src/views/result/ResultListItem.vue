@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <v-text-field :label="file" :value="text" />
-  </div>
+  <v-layout>
+    <v-btn flat icon @click="$emit('clear')">
+      <v-icon>clear</v-icon>
+    </v-btn>
+    <v-text-field :label="file" :value="text" @input="$listeners.input"/>
+  </v-layout>
 </template>
 
 <script>

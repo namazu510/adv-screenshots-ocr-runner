@@ -23,6 +23,8 @@
         <image-preview
           :files="files"
           :page.sync="page"
+          :font-color="useFilter ? fontColor : undefined"
+          :font-color-range="useFilter ? fontColorRange : undefined"
           :position.sync="position"
         />
       </v-flex>

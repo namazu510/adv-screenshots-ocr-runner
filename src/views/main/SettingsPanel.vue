@@ -69,7 +69,7 @@
           @change="$emit('update:useFilter', $event)"
           filled
         ></v-checkbox>
-        <v-layout v-if="useFilter">
+        <v-layout>
           <v-flex xs6>
             <v-text-field
               type="color"

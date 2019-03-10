@@ -13,3 +13,12 @@ export async function getImageFilesFromDir(dir) {
       return path.join(dir, file)
     })
 }
+
+export function renameFiles(renameFiles) {
+  const rename = ({ oldPath, newPath }) => {
+    return fs.rename(oldPath, newPath)
+  }
+  return Promise.all(
+    renameFiles.map(rename)
+  )
+}
