@@ -14,7 +14,7 @@
       </v-flex>
     </v-layout>
     <v-layout>
-      <v-flex xs6>
+      <v-flex>
         <div class="display-1">OCRルール</div>
         <div class="headline">台詞</div>
         <v-layout>
@@ -87,12 +87,6 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <div class="headline">出力ファイル名フォーマット</div>
-        <v-text-field
-          label="output-format"
-          v-model="outputFormat"
-          @input="$emit('update:outputFormat', $event)"
-        ></v-text-field>
       </v-flex>
     </v-layout>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-layout row>
-      <v-flex xs6>
+      <v-flex xs6 class="pr-2">
         <settings-panel
           :input-dir.sync="inputDir"
           :font-color.sync="fontColor"
@@ -11,15 +11,23 @@
           :use-filter.sync="useFilter"
         />
         <v-layout>
-          <v-btn ripple info large @click.native="testRun">
+          <v-btn
+            large
+            @click="testRun"
+            :disabled="status.inProgress"
+          >
             TestRun
           </v-btn>
-          <v-btn ripple primary large @click.native="run">
+          <v-btn
+            large
+            @click="run"
+            :disabled="status.inProgress"
+          >
             Run
           </v-btn>
         </v-layout>
       </v-flex>
-      <v-flex xs6>
+      <v-flex xs6 class="pl-2">
         <image-preview
           :files="files"
           :page.sync="page"
@@ -56,7 +64,7 @@ export default {
       useFilter: false,
       fontColor: "#FFFFFF",
       fontColorRange: 10,
-      outputFormat: "[text]",
+      outputFormat: "[text]"
     }
   },
   watch: {
@@ -66,17 +74,14 @@ export default {
     }
   },
   computed: {
-    selectedFile () {
+    selectedFile() {
       return this.files[this.page - 1]
     },
-    progress () {
-      return this.$store.getters['progress']
+    status() {
+      return this.$store.getters["status"]
     }
   },
   methods: {
-    logClear() {
-      this.logs = []
-    },
     async run() {
       await this.$store.dispatch("execOcr", {
         files: this.files,

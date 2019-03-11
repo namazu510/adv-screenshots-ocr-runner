@@ -7,16 +7,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    progress: false,
+    status: {
+      inProgress: false,
+      status: 0
+    },
     ocrRes: []
   },
   getters: {
-    progress: state => state.progress,
+    status: state => state.status,
     ocrRes: state => state.ocrRes
   },
   mutations: {
-    setProgress(state, progress) {
-      state.progress = progress
+    setStatus(state, { inProgress, status }) {
+      state.status = {
+        inProgress,
+        status
+      }
     },
     setOcrRes(state, { results }) {
       state.ocrRes = results
@@ -38,13 +44,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    execOcr({ commit }, { files, options }) {
-      commit("setProgress", true)
+    execOcr({ commit, state }, { files, options }) {
+      if (state.status.inProgress) {
+        throw new Error("already runnning ocr")
+      }
+      commit("setStatus", {
+        inProgress: true,
+        status: 0
+      })
       ipcRenderer.send("ocrRequest", {
         files,
         options
       })
       ipcRenderer.removeAllListeners("ocrReply")
+      let count = 0
       ipcRenderer.on("ocrReply", (event, type, value) => {
         switch (type) {
           case "progress": {
@@ -52,10 +65,18 @@ export default new Vuex.Store({
               file: value.file,
               text: value.text
             })
+            count++
+            commit("setStatus", {
+              inProgress: true,
+              status: count / files.length
+            })
             break
           }
           case "exit": {
-            commit("setProgress", false)
+            commit("setStatus", {
+              inProgress: false,
+              status: 0
+            })
             break
           }
         }
@@ -69,6 +90,9 @@ export default new Vuex.Store({
           oldPath: file,
           newPath
         }
+      })
+      commit('setOcrRes', {
+        results: []
       })
       await renameFiles(renames)
     }

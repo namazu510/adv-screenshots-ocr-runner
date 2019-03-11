@@ -21,8 +21,8 @@
 </template>
 <script>
 import { parseRgb, calcRgbDiff } from "../../util/color"
+import { loadImageWithBase64 } from "../../util/file"
 import { debounce } from "../../util/util"
-const fs = require("fs").promises
 const path = require("path")
 
 export default {
@@ -78,16 +78,9 @@ export default {
         return
       }
 
-      // プレイビューで表示するイメージを作る.
-      const base64 = Buffer.from(await fs.readFile(this.selectedFile)).toString(
-        "base64"
-      )
-      // todo 拡張子対応
-      const imgDataURL = `data:image/jpg;base64,${base64}`
-
       // canvasを引いて.枠線を引く
       const baseImage = new Image()
-      baseImage.src = imgDataURL
+      baseImage.src = await loadImageWithBase64(this.selectedFile)
 
       const draw = canvas => {
         const { x, y } = this.position.start

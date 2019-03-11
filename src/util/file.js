@@ -22,3 +22,12 @@ export function renameFiles(renameFiles) {
     renameFiles.map(rename)
   )
 }
+
+
+export async function loadImageWithBase64(file) {
+  const base64 = Buffer.from(await fs.readFile(file)).toString(
+    "base64"
+  )
+  // todo 拡張子対応
+  return `data:image/jpg;base64,${base64}`
+}

@@ -11,9 +11,11 @@
       <v-btn flat @click="$router.push({ name: 'result' })">
         <span class="mr-2">Result</span>
       </v-btn>
+      <!--
       <v-btn flat disabled>
         <span class="mr-2">Settings</span>
       </v-btn>
+      -->
     </v-toolbar>
     <v-content class="ma-2">
       <keep-alive>
