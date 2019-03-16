@@ -54,16 +54,14 @@ async function ocr(file, options) {
       }
     })
   }
-  // img.contain(1980, 400)
+  img.contain(1980, 400)
+
   const imgBuff = await img.getBufferAsync(Jimp.MIME_PNG)
 
   const text = await new Promise((resolve, reject) => {
     Tesseract.recognize(imgBuff, {
       lang: "jpn"
     })
-      .progress(p => {
-        console.log(p)
-      })
       .then(res => {
         console.log(res.text)
         resolve(res.text)
