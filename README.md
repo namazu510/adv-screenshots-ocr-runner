@@ -10,4 +10,4 @@ OCRを掛ける領域は任意に選択することができ, 文字色を指定
 ファイルをEverything等のファイル検索ソフトで台詞で検索できるようにするために使えます。
 
 ## Demo
-![](https://gyazo.com/79c114ac88cd4f03d9f6a6e37f7de465)
+[Gyazo GIF](https://gyazo.com/79c114ac88cd4f03d9f6a6e37f7de465)
