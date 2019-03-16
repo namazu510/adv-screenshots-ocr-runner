@@ -11,3 +11,22 @@ OCRを掛ける領域は任意に選択することができ, 文字色を指定
 
 ## Demo
 [Gyazo GIF](https://gyazo.com/79c114ac88cd4f03d9f6a6e37f7de465)
+
+# Development
+vue cli3 base / electron 製です.
+ocrにはtesseract.jsを利用させていただいております.
+
+## build & debug
+
+```
+$yarn 
+$yarn electron:serve
+```
+
+## electron packaging
+
+```
+$yarn 
+$yarn prepare
+$yarn package
+```
