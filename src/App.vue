@@ -11,11 +11,9 @@
       <v-btn flat @click="$router.push({ name: 'result' })">
         <span class="mr-2">Result</span>
       </v-btn>
-      <!--
-      <v-btn flat disabled>
-        <span class="mr-2">Settings</span>
+      <v-btn flat @click="openGithub">
+        <span class="mr-2">Help</span>
       </v-btn>
-      -->
     </v-toolbar>
     <v-content class="ma-2">
       <keep-alive>
@@ -30,6 +28,11 @@
 import Main from "./views/Main"
 export default {
   name: "App",
-  components: {MainView: Main}
+  components: {MainView: Main},
+  methods: {
+    openGithub() {
+      require('electron').shell.openExternal('https://github.com/namazu510/adv-screenshots-ocr-runner')
+    }
+  }
 }
 </script>
