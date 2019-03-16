@@ -86,6 +86,15 @@ export default new Vuex.Store({
         }
       })
     },
+    replaceResult({ state, commit }, { regExp, subStr }) {
+      const results = state.ocrRes.map((r) => {
+        r.text = r.text.replace(new RegExp(regExp), subStr);
+        return r;
+      })
+      commit('setOcrRes', {
+        results
+      })
+    },
     async renameAll({ state, commit }) {
       const renames = state.ocrRes.map(({ file, text }) => {
         const ext = path.extname(file)

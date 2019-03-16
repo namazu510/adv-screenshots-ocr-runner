@@ -6,9 +6,32 @@
     />
     <template v-if="ocrResults.length > 0">
       <v-layout row>
-        <v-btn block primary :disabled="progressStatus !== undefined" @click="renameAll">
-          すべてリネーム
-        </v-btn>
+        <v-flex xs8>
+          <v-layout>
+            <v-flex>
+              <v-text-field v-model="replaceRegEx" label="RegEx"/>
+            </v-flex>
+            <v-flex>
+              <v-text-field v-model="replaceSubstr" label="Substr"/>
+            </v-flex>
+            <v-flex>
+              <v-tooltip bottom>
+                <template #activator="{ on }">
+                  <v-btn icon @click="replaceResult" v-on="on">
+                    <v-icon>cached</v-icon>
+                  </v-btn>
+                </template>
+                <span>正規表現置換します</span>
+              </v-tooltip>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex xs4>
+          <v-btn block color="primary" :disabled="progressStatus !== undefined" @click="renameAll">
+            すべてリネーム
+          </v-btn>
+        </v-flex>
+
       </v-layout>
       <div class="result-list">
         <result-list-item
@@ -44,7 +67,9 @@ export default {
   data() {
     return {
       selectedFile: null,
-      previewImage: null
+      previewImage: null,
+      replaceRegEx: '「(.*)」',
+      replaceSubstr: '$1'
     }
   },
   computed: {
@@ -61,14 +86,15 @@ export default {
   },
   methods: {
     goNext(i) {
-      console.log('next')
       if (i  <= this.ocrResults.length) {
-        this.$refs['field'][i+1].focus();
+        const form =  this.$refs['field'][i+1]
+        form && form.focus();
       }
     },
     goPrev(i) {
       if (i !== 0) {
-        this.$refs['field'][i-1].focus();
+        const form = this.$refs['field'][i-1];
+        form && form.focus();
       }
     },
     async setPreviewImage(index) {
@@ -93,6 +119,15 @@ export default {
     },
     renameAll() {
       this.$store.dispatch("renameAll", {})
+    },
+    replaceResult() {
+      const test = new RegExp(this.replaceRegEx)
+      if (test) {
+        this.$store.dispatch('replaceResult', {
+          regExp: this.replaceRegEx,
+          subStr: this.replaceSubstr
+        })
+      }
     }
   }
 }
