@@ -11,20 +11,33 @@
           :use-filter.sync="useFilter"
         />
         <v-layout>
-          <v-btn
-            large
-            @click="testRun"
-            :disabled="status.inProgress"
-          >
-            TestRun
-          </v-btn>
-          <v-btn
-            large
-            @click="run"
-            :disabled="status.inProgress"
-          >
-            Run
-          </v-btn>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                large
+                v-on="on"
+                @click="testRun"
+                :disabled="status.inProgress"
+              >
+                TestRun
+              </v-btn>
+            </template>
+            <span>プレイビュー画像にOCRを実行</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template #activator="{ on }">
+              <v-btn
+                large
+                color="primary"
+                @click="run"
+                v-on="on"
+                :disabled="status.inProgress"
+              >
+                Run
+              </v-btn>
+            </template>
+            <span>選択フォルダにOCRを実行</span>
+          </v-tooltip>
         </v-layout>
       </v-flex>
       <v-flex xs6 class="pl-2">
