@@ -65,9 +65,14 @@ export default new Vuex.Store({
       ipcRenderer.on("ocrReply", (event, type, value) => {
         switch (type) {
           case "progress": {
+
+            // OCR結果からゴミを除く
+            // eslint-disable-next-line
+            const sanitizedText = value.text.replace(/[\n\r]/g, '').replace(/[\s 　]+/, '')
+
             commit("addOcrRes", {
               file: value.file,
-              text: value.text
+              text: sanitizedText
             })
             count++
             commit("setStatus", {
