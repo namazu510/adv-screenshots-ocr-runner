@@ -28,6 +28,10 @@ export default new Vuex.Store({
       state.ocrRes = results
     },
     addOcrRes(state, { file, text }) {
+      const test = state.ocrRes.findIndex(r => r.file === file)
+      if (test !== -1) {
+        state.ocrRes.splice(test, 1)
+      }
       state.ocrRes.push({
         file,
         text
@@ -82,7 +86,7 @@ export default new Vuex.Store({
         }
       })
     },
-    async renameAll({ state, commit }, _) {
+    async renameAll({ state, commit }) {
       const renames = state.ocrRes.map(({ file, text }) => {
         const ext = path.extname(file)
         const newPath = path.join(path.dirname(file), `${text}.${ext}`)
