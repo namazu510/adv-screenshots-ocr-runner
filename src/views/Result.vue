@@ -13,12 +13,15 @@
       <div class="result-list">
         <result-list-item
           v-for="(res, i) in ocrResults"
+          ref="field"
           :key="i"
           :text="res.text"
           :file="res.file"
           @input="updateResult(i, $event)"
           @clear="removeResult(i)"
           @focus="setPreviewImage(i)"
+          @next="goNext(i)"
+          @prev="goPrev(i)"
         />
       </div>
       <div class="preview-image-container">
@@ -57,6 +60,17 @@ export default {
     }
   },
   methods: {
+    goNext(i) {
+      console.log('next')
+      if (i  <= this.ocrResults.length) {
+        this.$refs['field'][i+1].focus();
+      }
+    },
+    goPrev(i) {
+      if (i !== 0) {
+        this.$refs['field'][i-1].focus();
+      }
+    },
     async setPreviewImage(index) {
       this.selectedFile = this.ocrResults[index].file
       if (!this.selectedFile) {

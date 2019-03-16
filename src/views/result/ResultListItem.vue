@@ -4,10 +4,13 @@
       <v-icon>clear</v-icon>
     </v-btn>
     <v-text-field
-            :label="file"
-            :value="text"
-            @input="$listeners.input"
-            @focus="$listeners.focus"
+      ref="field"
+      :label="file"
+      :value="text"
+      @input="$listeners.input"
+      @focus="$listeners.focus"
+      @keyup.up="$emit('prev')"
+      @keyup.down="$emit('next')"
     />
   </v-layout>
 </template>
@@ -18,6 +21,11 @@ export default {
   props: {
     file: String,
     text: String
+  },
+  methods: {
+    focus() {
+      this.$refs["field"].focus()
+    }
   }
 }
 </script>
