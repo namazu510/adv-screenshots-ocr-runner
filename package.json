@@ -6,8 +6,10 @@
     "prepare": "webpack --config tesseract.webpack.config.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "package": "electron:build && electron:package",
     "electron:serve": "vue-cli-service electron:serve",
     "electron:build": "vue-cli-service electron:build",
+    "electron:package": "cp dist_electron/worker.js dist_electron/bundled/worker.js  && vue-cli-service electron:build --skipBundle",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "lint": "vue-cli-service lint"
