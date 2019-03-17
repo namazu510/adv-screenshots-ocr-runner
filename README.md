@@ -9,8 +9,13 @@ OCRを掛ける領域は任意に選択することができ, 文字色を指定
 台詞をファイル名にすることができ, 
 ファイルをEverything等のファイル検索ソフトで台詞で検索できるようにするために使えます。
 
-## Demo
+## デモ
 [Gyazo GIF](https://gyazo.com/79c114ac88cd4f03d9f6a6e37f7de465)
+
+## どうやって使えばいいですか？
+https://github.com/namazu510/adv-screenshots-ocr-runner/releases　からインストーラをDLして使って下さい。
+
+バグの報告、ご要望などはissue or twittterでお願いします。
 
 # Development
 vue cli3 base / electron 製です.
